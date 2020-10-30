@@ -1,0 +1,24 @@
+[submodule "Armageddon/includes/spdlog"]
+	path = Armageddon/includes/spdlog
+	url = https://github.com/gabime/spdlog
+[submodule "Armageddon/includes/imgui"]
+	path = Armageddon/includes/imgui
+	url = https://github.com/ocornut/imgui
+[submodule "Armageddon/includes/DirectXTK"]
+	path = Armageddon/includes/DirectXTK
+	url = https://github.com/microsoft/DirectXTK
+[submodule "Armageddon/includes/assimp"]
+	path = Armageddon/includes/assimp
+	url = https://github.com/assimp/assimp
+[submodule "Armageddon/includes/ImGui-Addons"]
+	path = Armageddon/includes/ImGui-Addons
+	url = https://github.com/gallickgunner/ImGui-Addons
+[submodule "Armageddon/includes/L2DFileDialog"]
+	path = Armageddon/includes/L2DFileDialog
+	url = https://github.com/Limeoats/L2DFileDialog
+[submodule "Armageddon/includes/imgui-filebrowser"]
+	path = Armageddon/includes/imgui-filebrowser
+	url = https://github.com/AirGuanZ/imgui-filebrowser
+[submodule "Armageddon/includes/entt"]
+	path = Armageddon/includes/entt
+	url = https://github.com/skypjack/entt
