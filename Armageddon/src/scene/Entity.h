@@ -41,21 +41,9 @@ public:
 	{
 		return HandleEntity;
 	};
-	std::unique_ptr<Object>& GetEntityObject()
-	{
-		//Armageddon::Application::GetInstance()->GetWindow()->GetWindowGraphics()->GetVectorObjects();
-		/*for (auto& mods : Armageddon::Application::GetInstance()->GetWindow()->GetWindowGraphics()->GetVectorObjects())
-		{
-			if (mods.get() == Rendermodel)
-			{
-				return mods;
-			}
-			
-		}*/
-		
-	};
-	operator bool() const { return HandleEntity != entt::null; }
 
+	operator bool() const { return HandleEntity != entt::null; }
+	bool selected = false;
 private:
 
 	RenderModels* Rendermodel = nullptr;

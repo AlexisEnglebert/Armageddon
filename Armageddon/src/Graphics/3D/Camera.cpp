@@ -40,7 +40,7 @@ void Camera::SetZoomLevel(float windowWidth, float windowHeight, float ZoomLevel
     //this->ProjectionMatrix = DirectX::XMMatrixOrthographicOffCenterLH(-aspectRatio * ZoomLevel, aspectRatio * ZoomLevel,-1.0f * ZoomLevel,1.0f * ZoomLevel, -0.1f, 10.0f);
    float aspectRatio = windowWidth / windowHeight ;
     float fovRad = (90.0f * ZoomLevel / 360.0f) * DirectX::XM_2PI;
-    this->ProjectionMatrix = DirectX::XMMatrixPerspectiveFovLH(fovRad, aspectRatio , 0.1f, 1000.0f);
+  //  this->ProjectionMatrix = DirectX::XMMatrixPerspectiveFovLH(fovRad, aspectRatio , 0.1f, 1000.0f);
 
 }
 
@@ -164,7 +164,9 @@ void Camera::UpdateViewMatrix()
     DirectX::XMVECTOR UpDir = DirectX::XMVector3TransformCoord(this->DEFAULT_UP_VECTOR, CameraRotationMatrix);
     this->ViewMatrix = DirectX::XMMatrixLookAtLH(this->posVector, CamTarget, UpDir);
 
-    DirectX::XMMATRIX vecRotationMatrix = DirectX::XMMatrixRotationRollPitchYaw(0.0f,this->rotation.y,0.0f);
+    DirectX::XMMATRIX vecRotationMatrix = DirectX::XMMatrixRotationRollPitchYaw(this->rotation.x, this->rotation.y, this->rotation.z);
+    //Armageddon::Log::GetLogger()->trace("Cam pos  X: {0}  Y: {1}  Z: {2}",this->pos.x, this->pos.y, this->pos.z);
+    //Armageddon::Log::GetLogger()->trace("Cam ROT  X: {0}  Y: {1}  Z: {2}",this->rotation.x, this->rotation.y, this->rotation.z);
     this->vec_backward = XMVector3TransformCoord(this->DEFAULT_BACKWARD_VECTOR, vecRotationMatrix);
     this->vec_forward = XMVector3TransformCoord(this->DEFAULT_FORWARD_VECTOR, vecRotationMatrix);
     this->vec_left = XMVector3TransformCoord(this->DEFAULT_LEFT_VECTOR, vecRotationMatrix);
@@ -184,6 +186,7 @@ const DirectX::XMMATRIX& Camera::GetViewMatrix() const
 }
 const DirectX::XMMATRIX& Camera::GetProjectionMatrix() const
 {
+
     return this->ProjectionMatrix;
 }   
 

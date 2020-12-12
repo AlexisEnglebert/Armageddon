@@ -115,7 +115,7 @@ void OfsRenderTargetView::Bind(ID3D11DeviceContext* device_context)
 }
 void OfsRenderTargetView::Bind(ID3D11DeviceContext* device_context, ID3D11DepthStencilView* dephStencil)
 {
-    device_context->OMSetRenderTargets(1, pTargetView.GetAddressOf(),nullptr /*dephStencil*/);
+    device_context->OMSetRenderTargets(1, pTargetView.GetAddressOf(),dephStencil);
 
 }
 
@@ -135,6 +135,6 @@ void OfsRenderTargetView::BindBackBuffer(ID3D11DeviceContext* device_context, ID
 
 void OfsRenderTargetView::BindBackBuffer(ID3D11DeviceContext* device_context, ID3D11RenderTargetView** renderTarget, ID3D11DepthStencilView* dephStencil)
 {
-    device_context->OMSetRenderTargets(1, renderTarget, nullptr /*dephStencil*/);
+    device_context->OMSetRenderTargets(1, renderTarget, dephStencil);
 
 }

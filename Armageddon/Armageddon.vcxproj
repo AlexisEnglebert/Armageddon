@@ -12,6 +12,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="includes\entt\entt.hpp" />
+    <ClInclude Include="includes\ImGuizmo\ImCurveEdit.h" />
+    <ClInclude Include="includes\ImGuizmo\ImGradient.h" />
+    <ClInclude Include="includes\ImGuizmo\ImGuizmo.h" />
+    <ClInclude Include="includes\ImGuizmo\ImSequencer.h" />
+    <ClInclude Include="includes\ImGuizmo\ImZoomSlider.h" />
     <ClInclude Include="includes\imgui\backends\imgui_impl_dx11.h" />
     <ClInclude Include="includes\imgui\backends\imgui_impl_win32.h" />
     <ClInclude Include="includes\imgui\imconfig.h" />
@@ -39,7 +44,7 @@
     <ClInclude Include="src\Graphics\3D\OffScreenRenderTargetView.h" />
     <ClInclude Include="src\Graphics\3D\Renderable\RenderCube.h" />
     <ClInclude Include="src\Graphics\3D\Renderable\RenderModels.h" />
-    <ClInclude Include="src\Graphics\3D\Sprites.h" />
+    <ClInclude Include="src\Graphics\3D\Renderable\RenderSkyBox.h" />
     <ClInclude Include="src\Graphics\3D\VertexBuffer.h" />
     <ClInclude Include="src\Graphics\AdaptaterData.h" />
     <ClInclude Include="src\KeyboardClass.h" />
@@ -47,13 +52,16 @@
     <ClInclude Include="src\Includes.h" />
     <ClInclude Include="src\Log.h" />
     <ClInclude Include="src\Macros.h" />
-    <ClInclude Include="src\MouseClass.h" />
     <ClInclude Include="src\scene\Entity.h" />
     <ClInclude Include="src\scene\Scene.h" />
     <ClInclude Include="src\StartPoint.h" />
     <ClInclude Include="src\Window.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="includes\ImGuizmo\ImCurveEdit.cpp" />
+    <ClCompile Include="includes\ImGuizmo\ImGradient.cpp" />
+    <ClCompile Include="includes\ImGuizmo\ImGuizmo.cpp" />
+    <ClCompile Include="includes\ImGuizmo\ImSequencer.cpp" />
     <ClCompile Include="includes\imgui\backends\imgui_impl_dx11.cpp" />
     <ClCompile Include="includes\imgui\backends\imgui_impl_win32.cpp" />
     <ClCompile Include="includes\imgui\imgui.cpp" />
@@ -68,6 +76,7 @@
     <ClCompile Include="src\Graphics\3D\Camera.cpp" />
     <ClCompile Include="src\Graphics\3D\D3D_graphics.cpp" />
     <ClCompile Include="src\Graphics\3D\D3D_Shaders.cpp" />
+    <ClCompile Include="src\Graphics\3D\Material.cpp" />
     <ClCompile Include="src\Graphics\3D\Renderable\Mesh.cpp" />
     <ClCompile Include="src\Graphics\3D\Renderable\Object.cpp" />
     <ClCompile Include="src\Graphics\3D\OffScreenRenderTargetView.cpp" />
@@ -75,7 +84,6 @@
     <ClCompile Include="src\KeyboardClass.cpp" />
     <ClCompile Include="src\Events\KeyboardEventManager.cpp" />
     <ClCompile Include="src\Log.cpp" />
-    <ClCompile Include="src\MouseClass.cpp" />
     <ClCompile Include="src\scene\Component.h" />
     <ClCompile Include="src\scene\Scene.cpp" />
     <ClCompile Include="src\Window.cpp" />
@@ -89,6 +97,14 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
     </FxCompile>
+    <FxCompile Include="shaders\DirectX\PSSkyBox.hlsl">
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">ps_main</EntryPointName>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">ps_main</EntryPointName>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+    </FxCompile>
     <FxCompile Include="shaders\DirectX\VertexShader.hlsl">
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">vs_main</EntryPointName>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
@@ -96,6 +112,14 @@
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">vs_main</EntryPointName>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="shaders\DirectX\VSSkyBox.hlsl">
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">vs_main</EntryPointName>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">vs_main</EntryPointName>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
     </FxCompile>
   </ItemGroup>
   <PropertyGroup Label="Globals">
@@ -146,8 +170,8 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <PreprocessorDefinitions>IMGUI_DISABLE_OBSOLETE_FUNCTIONS;AG_BUILD_DLL;_WINDLL;NOMINMAX;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(Solutiondir)\Armageddon\includes\assimp\build\include;$(Solutiondir)\Armageddon\includes\assimp\include;$(Solutiondir)Armageddon\includes\spdlog\include;$(SolutionDir)Armageddon\includes\DirectXTK\Inc;$(SolutionDir)Armageddon\includes\DirectXTex;$(SolutionDir)Armageddon\includes\imgui\;$(SolutionDir)Armageddon\includes\L2DFileDialog\L2DFileDialog\;$(SolutionDir)\Armageddon\includes\entt;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;IMGUI_DISABLE_OBSOLETE_FUNCTIONS;AG_BUILD_DLL;_WINDLL;NOMINMAX;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(Solutiondir)\Armageddon\includes\assimp\build\include;$(Solutiondir)\Armageddon\includes\assimp\include;$(Solutiondir)Armageddon\includes\spdlog\include;$(SolutionDir)Armageddon\includes\DirectXTK\Inc;$(SolutionDir)Armageddon\includes\DirectXTex;$(SolutionDir)Armageddon\includes\imgui\;$(SolutionDir)\Armageddon\includes\entt;$(SolutionDir)\Armageddon\includes\ImGuizmo;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
     <Link>
@@ -167,19 +191,20 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <PreprocessorDefinitions>IMGUI_DISABLE_OBSOLETE_FUNCTIONS;AG_BUILD_DLL;_WINDLL;NOMINMAX;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(Solutiondir)\Armageddon\includes\assimp\build\include;$(Solutiondir)\Armageddon\includes\assimp\include;$(Solutiondir)Armageddon\includes\spdlog\include;$(SolutionDir)Armageddon\includes\DirectXTK\Inc;$(SolutionDir)Armageddon\includes\DirectXTex;$(SolutionDir)Armageddon\includes\imgui\;$(SolutionDir)Armageddon\includes\L2DFileDialog\L2DFileDialog\;$(SolutionDir)\Armageddon\includes\entt;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;IMGUI_DISABLE_OBSOLETE_FUNCTIONS;AG_BUILD_DLL;_WINDLL;NOMINMAX;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(Solutiondir)\Armageddon\includes\assimp\build\include;$(Solutiondir)\Armageddon\includes\assimp\include;$(Solutiondir)Armageddon\includes\spdlog\include;$(SolutionDir)Armageddon\includes\DirectXTK\Inc;$(SolutionDir)Armageddon\includes\DirectXTex;$(SolutionDir)Armageddon\includes\imgui\;$(SolutionDir)\Armageddon\includes\entt;$(SolutionDir)\Armageddon\includes\ImGuizmo;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>DirectXTK.lib;assimp-vc142-mtd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>DirectXTK.lib;assimp-vc142-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)Armageddon\lib\release</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy "$(Solutiondir)bin\Debug-x64\Armageddon\Armageddon.dll" "$(Solutiondir)bin\Debug-x64\TestApplication" /Y /I</Command>
+      <Command>xcopy "$(Solutiondir)bin\Release-x64\Armageddon\Armageddon.dll" "$(Solutiondir)bin\Release-x64\TestApplication" /Y /I
+ xcopy "$(Solutiondir)bin\Release-x64\Armageddon\Armageddon.lib" "$(Solutiondir)TestApplication\lib\release" /Y /I</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -12,7 +12,7 @@
 #include "ConstantBuffer.h"
 #include <memory>
 #include <SimpleMath.h>
-#include "Sprites.h"
+
 #include "Camera.h"
 #include "../../Macros.h"
 #include <PrimitiveBatch.h>
@@ -26,31 +26,27 @@ namespace Armageddon
 
 	struct SpritesData
 	{
-		Vertex vertex[4];
-		ID3D11ShaderResourceView* texture;
+	
 	};
 
 	class DLL D3D_graphics {
 	public:
+		~D3D_graphics();
 		bool Init(HWND hwnd, int height, int width);
 		void RenderFrame();
-		void DrawTriangle(Vertex v[], int Vertexcount, const wchar_t* FilePath , float x , float y);
-		void DrawSprite(const wchar_t* FilePath, float x, float y);
-		void DrawTest(const wchar_t* FilePath);
 		bool CreateDephtStencilBuffer(int width, int height);
 		void ResetDephtStencileBuffer(float width, float height);
-		//ID3D11ShaderResourceView* GetSceneTexture() { return ShaderRessourceView.Get(); };
-	//	thread_local ImGuiContext* GetContext() {return ImguiContext;};
 		int max_Vertex = 500;
-		~D3D_graphics();
+		
 		
 		HWND* GetHandleWindow() { return handlewnd; }
 		void ResizeBuffer(float width, float height);
-		Sprites* GetSpriteRenderer() { return &sprite; };
 		OfsRenderTargetView* GetOfsRender() { return &r; };
+		void Begin();
+		void BindBackBuffer();
+		void End();
 
 		/* SPRITES */
-		std::unique_ptr<DirectX::SpriteBatch> m_spriteBatch = nullptr;
 		//std::unique_ptr<DirectX::PrimitiveBatch<Vertex>> m_primitive = nullptr;
 
 		DirectX::SimpleMath::Vector2 m_screenPos;
@@ -89,6 +85,10 @@ namespace Armageddon
 	{
 		return d3dDebug.Get();
 	};
+	float GetDeltaTime()
+	{
+		return DeltaTime;
+	}
 	void SetWireFrame(bool wireframe);
 
 	private:
@@ -99,13 +99,11 @@ namespace Armageddon
 		Microsoft::WRL::ComPtr <ID3D11Debug> d3dDebug;
 
 		bool InitDirectX(HWND hwnd, float height, float width);
-		bool InitShader();
-		bool InitScene();
+
 		
 		void CreateRenderTargetView();
 		void CreateViewPort(float width, float height);
 		void CleanRenderTargetView();
-		void ImGuiRender();
 		void CreateRasterizer(D3D11_RASTERIZER_DESC rDesc);
 		void ChangeRasterizer(D3D11_RASTERIZER_DESC rDesc);
 		D3D11_VIEWPORT viewport;
@@ -115,8 +113,12 @@ namespace Armageddon
 		HWND* handlewnd;
 		Microsoft::WRL::ComPtr<ID3D11Texture2D> FrameBuffer;
 		
+		/* DELTA TIME */
+		float DeltaTime = 0.0f;
+		float OldDeltaTime = 0.0f;
+		float CurrentTime = 0.0f;
 
-		void DrawQuad();
+
 		/*BATCH RENDERING*/
 		std::unique_ptr<SpritesData[]> SpriteQueue;
 		int n_SpriteCount = 0; 
@@ -156,20 +158,13 @@ namespace Armageddon
 
 		VertexBuffer<Vertex> VertexBuffer;
 
-		Sprites sprite;
+	
 
 
 		Camera camera;
 
-		std::vector<std::unique_ptr<Object>> o;
 
-	protected:
 
-		
-		/*VERTEX*/
-		/*D3D11_BUFFER_DESC vertex_buffer_desc;*/
 
-		/*D3D11_SUBRESOURCE_DATA VertexBufferData;*/
-		friend class Sprites;
 	};
 }

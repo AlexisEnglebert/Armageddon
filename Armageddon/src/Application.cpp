@@ -2,6 +2,7 @@
 #include "imgui.h"
 #include "backends/imgui_impl_win32.h"
 #include "backends/imgui_impl_dx11.h"
+#include <ImGuizmo.h>
 #include "Window.h"
 
 /*extern void Armageddon::OnUpdate();
@@ -30,7 +31,10 @@ namespace Armageddon
 	{
 		delete(wind);
 	}
-
+	constexpr auto ColorFromBytes = [](uint8_t r, uint8_t g, uint8_t b)
+	{
+		return ImVec4((float)r / 255.0f, (float)g / 255.0f, (float)b / 255.0f, 1.0f);
+	};
 	void Application::ImGuiInit()
 	{
 	//	IMGUI_CHECKVERSION();
@@ -40,7 +44,7 @@ namespace Armageddon
 		ImGuiIO& io = ImGui::GetIO(); (void)io;
 		io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 		ImVec4* colors = ImGui::GetStyle().Colors;
-		colors[ImGuiCol_Text] = ImVec4(1.00f, 1.00f, 1.00f, 1.00f);
+		/*colors[ImGuiCol_Text] = ImVec4(1.00f, 1.00f, 1.00f, 1.00f);
 		colors[ImGuiCol_TextDisabled] = ImVec4(0.50f, 0.50f, 0.50f, 1.00f);
 		colors[ImGuiCol_WindowBg] = ImVec4(0.06f, 0.06f, 0.06f, 0.94f);
 		colors[ImGuiCol_ChildBg] = ImVec4(1.00f, 1.00f, 1.00f, 0.00f);
@@ -82,7 +86,87 @@ namespace Armageddon
 		colors[ImGuiCol_DragDropTarget] = ImVec4(1.00f, 1.00f, 0.00f, 0.90f);
 		colors[ImGuiCol_NavHighlight] = ImVec4(0.60f, 0.60f, 0.60f, 1.00f);
 		colors[ImGuiCol_NavWindowingHighlight] = ImVec4(1.00f, 1.00f, 1.00f, 0.70f);
-		ImGui::GetStyle().WindowMenuButtonPosition = ImGuiDir_None;
+		ImGui::GetStyle().WindowMenuButtonPosition = ImGuiDir_None;*/
+		ImGuiStyle* style = &ImGui::GetStyle();
+		//ImVec4* colors = style->Colors;
+
+		const ImVec4 bgColor = ColorFromBytes(37, 37, 38);
+		const ImVec4 lightBgColor = ColorFromBytes(82, 82, 85);
+		const ImVec4 veryLightBgColor = ColorFromBytes(90, 90, 95);
+
+		const ImVec4 panelColor = ColorFromBytes(51, 51, 55);
+		const ImVec4 panelHoverColor = ColorFromBytes(29, 151, 236);
+		const ImVec4 panelActiveColor = ColorFromBytes(0, 119, 200);
+
+		const ImVec4 textColor = ColorFromBytes(255, 255, 255);
+		const ImVec4 textDisabledColor = ColorFromBytes(151, 151, 151);
+		const ImVec4 borderColor = ColorFromBytes(78, 78, 78);
+
+		colors[ImGuiCol_Text] = textColor;
+		colors[ImGuiCol_TextDisabled] = textDisabledColor;
+		colors[ImGuiCol_TextSelectedBg] = panelActiveColor;
+		colors[ImGuiCol_WindowBg] = bgColor;
+		colors[ImGuiCol_ChildBg] = bgColor;
+		colors[ImGuiCol_PopupBg] = bgColor;
+		colors[ImGuiCol_Border] = borderColor;
+		colors[ImGuiCol_BorderShadow] = borderColor;
+		colors[ImGuiCol_FrameBg] = panelColor;
+		colors[ImGuiCol_FrameBgHovered] = panelHoverColor;
+		colors[ImGuiCol_FrameBgActive] = panelActiveColor;
+		colors[ImGuiCol_TitleBg] = bgColor;
+		colors[ImGuiCol_TitleBgActive] = bgColor;
+		colors[ImGuiCol_TitleBgCollapsed] = bgColor;
+		colors[ImGuiCol_MenuBarBg] = panelColor;
+		colors[ImGuiCol_ScrollbarBg] = panelColor;
+		colors[ImGuiCol_ScrollbarGrab] = lightBgColor;
+		colors[ImGuiCol_ScrollbarGrabHovered] = veryLightBgColor;
+		colors[ImGuiCol_ScrollbarGrabActive] = veryLightBgColor;
+		colors[ImGuiCol_CheckMark] = panelActiveColor;
+		colors[ImGuiCol_SliderGrab] = panelHoverColor;
+		colors[ImGuiCol_SliderGrabActive] = panelActiveColor;
+		colors[ImGuiCol_Button] = panelColor;
+		colors[ImGuiCol_ButtonHovered] = panelHoverColor;
+		colors[ImGuiCol_ButtonActive] = panelHoverColor;
+		colors[ImGuiCol_Header] = panelColor;
+		colors[ImGuiCol_HeaderHovered] = panelHoverColor;
+		colors[ImGuiCol_HeaderActive] = panelActiveColor;
+		colors[ImGuiCol_Separator] = borderColor;
+		colors[ImGuiCol_SeparatorHovered] = borderColor;
+		colors[ImGuiCol_SeparatorActive] = borderColor;
+		colors[ImGuiCol_ResizeGrip] = bgColor;
+		colors[ImGuiCol_ResizeGripHovered] = panelColor;
+		colors[ImGuiCol_ResizeGripActive] = lightBgColor;
+		colors[ImGuiCol_PlotLines] = panelActiveColor;
+		colors[ImGuiCol_PlotLinesHovered] = panelHoverColor;
+		colors[ImGuiCol_PlotHistogram] = panelActiveColor;
+		colors[ImGuiCol_PlotHistogramHovered] = panelHoverColor;
+		//colors[ImGuiCol_ModalWindowDarkening] = bgColor;
+		colors[ImGuiCol_DragDropTarget] = bgColor;
+		colors[ImGuiCol_NavHighlight] = bgColor;
+		colors[ImGuiCol_DockingPreview] = panelActiveColor;
+		colors[ImGuiCol_Tab] = bgColor;
+		colors[ImGuiCol_TabActive] = panelActiveColor;
+		colors[ImGuiCol_TabUnfocused] = bgColor;
+		colors[ImGuiCol_TabUnfocusedActive] = panelActiveColor;
+		colors[ImGuiCol_TabHovered] = panelHoverColor;
+
+		//style->FramePadding = ImVec2(4, 2);
+		style->ItemSpacing = ImVec2(10, 7);
+		style->IndentSpacing = 12;
+		style->ScrollbarSize = 10;
+
+		style->WindowRounding = 4;
+		style->FrameRounding = 4;
+		style->PopupRounding = 4;
+		style->ScrollbarRounding = 6;
+		style->GrabRounding = 4;
+		style->TabRounding = 4;
+
+
+		style->WindowTitleAlign = ImVec2(1.0f, 0.5f);
+		style->WindowMenuButtonPosition = ImGuiDir_Right;
+
+		style->DisplaySafeAreaPadding = ImVec2(4, 4);
 	//	ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
 		//ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
 		//ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, { 0.0f,0.0f });
@@ -95,6 +179,7 @@ namespace Armageddon
 		ImGui_ImplDX11_NewFrame();
 		ImGui_ImplWin32_NewFrame();
 		ImGui::NewFrame();
+		ImGuizmo::BeginFrame();
 	}
 
 

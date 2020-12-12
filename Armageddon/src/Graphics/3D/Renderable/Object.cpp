@@ -27,12 +27,12 @@ void Object::InitIndexBuffer(ID3D11Device* device, ID3D11DeviceContext* device_c
 
 void Object::InitShaders(Microsoft::WRL::ComPtr <ID3D11Device>& device,std::wstring ShaderFloder, std::wstring VertexShader, std::wstring PixelShader, D3D11_INPUT_ELEMENT_DESC layout[],UINT SizeOfLayout)
 {
-	if (!vertexShader.Init(device, ShaderFloder + L"VertexShader.cso", layout, SizeOfLayout))
+	if (!vertexShader.Init(device, ShaderFloder + VertexShader, layout, SizeOfLayout))
 	{
 		Armageddon::Log::GetLogger()->error("FAILED INITIALIZE VERTEX SHADERS ");
 	}
 
-	if (!pixelShader.Init(device, ShaderFloder + L"PixelShader.cso"))
+	if (!pixelShader.Init(device, ShaderFloder + PixelShader))
 	{
 		Armageddon::Log::GetLogger()->error("FAILED INITIALIZE PIXEL SHADERS ");
 	}
@@ -45,6 +45,16 @@ void Object::InitConstantBuffer(ID3D11Device* device, ID3D11DeviceContext* devic
 	{
 		Armageddon::Log::GetLogger()->error("ERROR WHEN CREATING CONSTANT BUFFER [{0}]", hr);
 	}
+	hr = lightBuffer.init(device, device_contex);
+	if (FAILED(hr))
+	{
+		Armageddon::Log::GetLogger()->error("ERROR WHEN CREATING Light Buffer [{0}]", hr);
+
+	}
+}
+
+void Object::InitRasterizer(ID3D11Device* device)
+{
 }
 
 void Object::BindVertexBuffer(ID3D11DeviceContext* device_contex)
@@ -76,6 +86,12 @@ void Object::BindConstantBuffer(ID3D11DeviceContext* device_contex)
 
 	device_contex->VSSetConstantBuffers(0, 1, this->ConstantBuffer.GetAdressOf());
 	device_contex->PSSetConstantBuffers(0, 1, this->ConstantBuffer.GetAdressOf());
+	if (!lightBuffer.ApplyChanges())
+	{
+
+	}
+	device_contex->VSSetConstantBuffers(1, 1, this->lightBuffer.GetAdressOf());
+	device_contex->PSSetConstantBuffers(1, 1, this->lightBuffer.GetAdressOf());
 }
 
 void Object::BindInputLayout(ID3D11DeviceContext* device_contex)
@@ -84,8 +100,13 @@ void Object::BindInputLayout(ID3D11DeviceContext* device_contex)
 
 }
 
+void Object::BindRasterize(ID3D11Device* device)
+{
+}
+
 void Object::Draw(ID3D11DeviceContext* device_contex)
 {
+	Armageddon::Log::GetLogger()->info("DRAW OBJECT");
 		BindShader(device_contex);
 		BindConstantBuffer(device_contex);
 		BindInputLayout(device_contex);
@@ -117,8 +138,8 @@ float a;
 void Object::UpDateConstantBuffer(Camera* cam)
 {
 
-	DirectX::XMMATRIX WorldMat = DirectX::XMMatrixIdentity();
-	f += 0.01;
+	
+	f += 0.1;
 	a += 0.01;
 	//WorldMat += DirectX::XMMatrixRotationX(sin(f));
 	
@@ -129,23 +150,22 @@ void Object::UpDateConstantBuffer(Camera* cam)
 	{
 		a = 0;
 	}
-	//this->ConstantBuffer.data.LightDir = { 0.0f,0.0f,f };
-	this->ConstantBuffer.data.color = { 1.0f };
-	this->ConstantBuffer.data.mat = (WorldMat * TransformMat) * cam->GetViewMatrix() * cam->GetProjectionMatrix() ;
-	this->ConstantBuffer.data.Yoffset = 0;
-	this->ConstantBuffer.data.Xoffset = 0;
-}
-void Object::UpDateConstantBuffer(Camera* cam, DirectX::XMMATRIX Transform)
-{
-	DirectX::XMMATRIX WorldMat = DirectX::XMMatrixIdentity();
 
-	f += 0.01;
-	Armageddon::Log::GetLogger()->trace("F = {0}",f);
-	WorldMat = DirectX::XMMatrixRotationY(f);
+	//this->ConstantBuffer.data.LightDir = { 0.0f,0.0f,DirectX::XMConvertToRadians(f) };
+	ConstantBuffer.data.WorldMat = (WorldMat * this->TransformMat);
+	ConstantBuffer.data.ProjectionMat = cam->GetProjectionMatrix();
+	ConstantBuffer.data.ViewMat = cam->GetViewMatrix();
+	ConstantBuffer.data.MVP = cam->GetViewMatrix() * cam->GetProjectionMatrix();
+	ConstantBuffer.data.Yoffset = 0;
+	ConstantBuffer.data.Xoffset = 0; 
+	ConstantBuffer.data.LightDir = LightDirection;
+	ConstantBuffer.data.CameraPos = { cam->GetPos().x,cam->GetPos().y,cam->GetPos().z };
+	//ConstantBuffer.data.EyePos = cam->getpo
+	ConstantBuffer.data.RoughNess = Roughness;
+	ConstantBuffer.data.MetalNess = metalNess;
+	//this->lightBuffer.data.LightIntensity = 1.0f;
 
 
-	this->ConstantBuffer.data.color = { 1.0f };
-	this->ConstantBuffer.data.mat = WorldMat * cam->GetViewMatrix() * cam->GetProjectionMatrix() * Transform;
-	this->ConstantBuffer.data.Yoffset = 0;
-	this->ConstantBuffer.data.Xoffset = 0;
+
+	lightBuffer.data.LightIntensity = 10;
 }

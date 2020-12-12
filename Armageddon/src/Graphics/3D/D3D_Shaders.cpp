@@ -1,12 +1,13 @@
 #include "D3D_Shaders.h"
 #include "../../Log.h"
-
+#include <dxgitype.h>
 bool VertexShader::Init(Microsoft::WRL::ComPtr<ID3D11Device>& device, std::wstring shaderPath , D3D11_INPUT_ELEMENT_DESC* desc, UINT numElements)
 {
     HRESULT hr = D3DReadFileToBlob(shaderPath.c_str(),this->shader_buffer.GetAddressOf());
     if (FAILED(hr))
     {
-        Armageddon::Log::GetLogger()->error("FAILED INIT VERTEX SHADER");
+      
+        Armageddon::Log::GetLogger()->error("FAILED INIT VERTEX SHADER  [{0}]",hr);
         return false;
 
     }
@@ -14,11 +15,10 @@ bool VertexShader::Init(Microsoft::WRL::ComPtr<ID3D11Device>& device, std::wstri
     hr = device->CreateVertexShader(this->shader_buffer->GetBufferPointer(), this->shader_buffer->GetBufferSize(), NULL, this->shader.GetAddressOf());
     if (FAILED(hr))
     {
-        Armageddon::Log::GetLogger()->error("FAILED  CREATING VERTEX SHADER");
+        Armageddon::Log::GetLogger()->error("FAILED  CREATING VERTEX SHADER  [{0}]", hr);
         return false;
 
     }
-    Armageddon::Log::GetLogger()->trace("CREATE TTTT");
 
     hr = device->CreateInputLayout(desc, numElements, this->shader_buffer->GetBufferPointer(), this->shader_buffer->GetBufferSize(), this->inputlayout.GetAddressOf());
     if (FAILED(hr))

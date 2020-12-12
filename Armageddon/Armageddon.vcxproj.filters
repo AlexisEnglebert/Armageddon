@@ -42,9 +42,6 @@
     <ClInclude Include="src\KeyboardClass.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="src\MouseClass.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
     <ClInclude Include="src\Events\MouseEvent.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
@@ -96,9 +93,6 @@
     <ClInclude Include="src\Graphics\3D\VertexBuffer.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="src\Graphics\3D\Sprites.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
     <ClInclude Include="src\Graphics\3D\Camera.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
@@ -138,6 +132,24 @@
     <ClInclude Include="includes\imgui\backends\imgui_impl_win32.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
+    <ClInclude Include="src\Graphics\3D\Renderable\RenderSkyBox.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\ImGuizmo\ImCurveEdit.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\ImGuizmo\ImGradient.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\ImGuizmo\ImGuizmo.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\ImGuizmo\ImSequencer.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="includes\ImGuizmo\ImZoomSlider.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Application.cpp">
@@ -156,9 +168,6 @@
       <Filter>Fichiers sources</Filter>
     </ClCompile>
     <ClCompile Include="src\KeyboardClass.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="src\MouseClass.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
     <ClCompile Include="src\Events\MouseEvent.cpp">
@@ -215,9 +224,26 @@
     <ClCompile Include="includes\imgui\backends\imgui_impl_win32.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
+    <ClCompile Include="src\Graphics\3D\Material.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="includes\ImGuizmo\ImCurveEdit.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="includes\ImGuizmo\ImGradient.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="includes\ImGuizmo\ImSequencer.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="includes\ImGuizmo\ImGuizmo.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="shaders\DirectX\VertexShader.hlsl" />
     <FxCompile Include="shaders\DirectX\PixelShader.hlsl" />
+    <FxCompile Include="shaders\DirectX\PSSkyBox.hlsl" />
+    <FxCompile Include="shaders\DirectX\VSSkyBox.hlsl" />
   </ItemGroup>
 </Project>

@@ -5,6 +5,7 @@
 #include "includes.h"
 #include <future>
 #include <hidusage.h>
+#include <strsafe.h>
 
 #include "Application.h"
 #include "Events/Event.h"
@@ -26,7 +27,7 @@ namespace Armageddon
 		this->Instance = (HINSTANCE)GetModuleHandle(NULL);
 
 		this->RegisterWindowClass();
-		Armageddon::Log::GetLogger()->trace("Register Class ");
+		
 
 		this->Handle = CreateWindowEx(
 			0,                              // Optional window styles.
@@ -53,13 +54,11 @@ namespace Armageddon
 
 		}
 
-		
 
 		ShowWindow(this->Handle, SW_MAXIMIZE);
 		SetForegroundWindow(this->Handle);
-		SetFocus(this->Handle);
+		//SetFocus(this->Handle);
 		Armageddon::Log::GetLogger()->trace("Window Finished ");
-		
 		
 		
 		return this;
@@ -145,27 +144,31 @@ namespace Armageddon
 		}
 		case WM_MOUSEMOVE:
 		{
-			int x = LOWORD(lparam);
-			int y = HIWORD(lparam);
-			mouse.onMouseMove(x, y);
-			//Armageddon::Log::GetLogger()->trace("Mouse Moved : {0} , {1} ",x,y);
-			MouseCallBack(MouseEvent::MEventType::Move);
+			float x = LOWORD(lparam);
+			float y = HIWORD(lparam);
+			
+			
+			MouseCallBack(MouseEvent::MEventType::Move , x - m_old_mouse_posX,y- m_old_mouse_posY);
+			m_old_mouse_posX = x;
+			m_old_mouse_posY = y;
 			return 0;
 		}
 		case WM_LBUTTONDOWN:
 		{
+			Armageddon::Log::GetLogger()->trace("l down");
+
 			int x = LOWORD(lparam);
 			int y = HIWORD(lparam);
-			mouse.onLeftPressed(x, y);
-			MouseCallBack(MouseEvent::MEventType::Lpress);
+			MouseCallBack(MouseEvent::MEventType::Lpress ,x,y);
 			return 0;
 		}
 		case WM_RBUTTONDOWN:
 		{
+			Armageddon::Log::GetLogger()->trace("r down");
+
 			int x = LOWORD(lparam);
 			int y = HIWORD(lparam);
-			mouse.onRightPressed(x, y);
-			MouseCallBack(MouseEvent::MEventType::Rpress);
+			MouseCallBack(MouseEvent::MEventType::Rpress,x,y);
 
 			return 0;
 		}
@@ -173,33 +176,34 @@ namespace Armageddon
 		{
 			int x = LOWORD(lparam);
 			int y = HIWORD(lparam);
-			mouse.onMiddlePressed(x, y);
-			MouseCallBack(MouseEvent::MEventType::Mpress);
+			MouseCallBack(MouseEvent::MEventType::Mpress,x,y);
 
 			return 0;
 		}
 		case WM_LBUTTONUP:
 		{
+			Armageddon::Log::GetLogger()->trace("l up");
+
 			int x = LOWORD(lparam);
 			int y = HIWORD(lparam);
-			mouse.onLeftReleased(x, y);
-			MouseCallBack(MouseEvent::MEventType::Lrelease);
+		
+			MouseCallBack(MouseEvent::MEventType::Lrelease,x,y);
 			return 0;
 		}
 		case WM_RBUTTONUP:
 		{
+			Armageddon::Log::GetLogger()->trace("r up");
+
 			int x = LOWORD(lparam);
 			int y = HIWORD(lparam);
-			mouse.onRightReleased(x, y);
-			MouseCallBack(MouseEvent::MEventType::Rrelease);
+			MouseCallBack(MouseEvent::MEventType::Rrelease,x,y);
 			return 0;
 		}
 		case WM_MBUTTONUP:
 		{
 			int x = LOWORD(lparam);
 			int y = HIWORD(lparam);
-			mouse.onMiddleReleased(x, y);
-			MouseCallBack(MouseEvent::MEventType::Mpress);
+			MouseCallBack(MouseEvent::MEventType::Mpress,x,y);
 			return 0;
 		}
 		case WM_MOUSEWHEEL:
@@ -209,25 +213,25 @@ namespace Armageddon
 			if (GET_WHEEL_DELTA_WPARAM(wparam) > 0)
 			{
 
-				mouse.onWheelUp(x, y);
-				MouseCallBack(MouseEvent::MEventType::Wheelup);
+				MouseCallBack(MouseEvent::MEventType::Wheelup,x,y);
 
 			}
 			else if (GET_WHEEL_DELTA_WPARAM(wparam) < 0)
 			{
 
-				mouse.onWheelDown(x, y);
-				MouseCallBack(MouseEvent::MEventType::Wheeldown);
+				MouseCallBack(MouseEvent::MEventType::Wheeldown,x,y);
 
 			}
 			break;
 		}
-		case WM_INPUT:
+		/*case WM_INPUT:
 		{
-			
-
+			if (!RawInput)
+			{
+				break;
+			}
 			UINT DataSize;
-			GetRawInputData(reinterpret_cast<HRAWINPUT>(lparam), RID_INPUT, NULL, &DataSize, sizeof(RAWINPUTHEADER));
+			GetRawInputData(reinterpret_cast<HRAWINPUT>(lparam), RID_INPUT, nullptr, &DataSize, sizeof(RAWINPUTHEADER));
 
 			if (DataSize > 0)
 			{
@@ -235,15 +239,19 @@ namespace Armageddon
 				if (GetRawInputData(reinterpret_cast<HRAWINPUT>(lparam), RID_INPUT, raw_data.get(), &DataSize, sizeof(RAWINPUTHEADER)) == DataSize)
 				{
 					RAWINPUT* raw = reinterpret_cast<RAWINPUT*>(raw_data.get());
+					TCHAR pszDest[1000];
+
 					if (raw->header.dwType == RIM_TYPEMOUSE)
 					{
+						Armageddon::Log::GetLogger()->trace("mouse raw input");
+
 						//mouse.onRawMouseMove(raw->data.mouse.lLastX, raw->data.mouse.lLastY);
 					//	MouseCallBack(MouseEvent::MEventType::RAW_MOVE);
 					}
 				}
 			}
 			return DefWindowProc(hwnd, uMsg, wparam, lparam);
-		}
+		}*/
 
 		
 			default:
@@ -309,6 +317,7 @@ namespace Armageddon
 
 		}
 	}
+	bool RawInput_Init = false;
 	LRESULT CALLBACK CustomWindowProcSetup(HWND hwnd, UINT uMsg, WPARAM wparam, LPARAM lparam)   
 	{
 		switch (uMsg)
@@ -316,17 +325,34 @@ namespace Armageddon
 			case WM_NCCREATE:
 			{
 				Log::GetLogger()->trace("WINDOW CREATE EVENT.");
-				
+
 				const CREATESTRUCTW* const pCreate = reinterpret_cast<CREATESTRUCTW*>(lparam);
 				Window* ptrWindow = reinterpret_cast<Window*>(pCreate->lpCreateParams);
 				if (ptrWindow == nullptr)
 				{
 					Log::GetLogger()->error("Critical Error: Pointer to window is null.");
-	
+
 					exit(-1);
 				}
+				if (RawInput_Init)
+				{
+					RAWINPUTDEVICE Rid;
 
-				
+					Rid.usUsagePage = 0x01;
+					Rid.usUsage = 0x02;
+					Rid.dwFlags = 0;
+					Rid.hwndTarget = nullptr;
+
+
+
+
+					if (RegisterRawInputDevices(&Rid, 1, sizeof(Rid)) == FALSE) {
+						GetLastError();
+						Armageddon::Log::GetLogger()->trace("ERROR WHEN REGISTERING RAW INPUT DEVICE");
+					}
+					RawInput_Init = true;
+
+				}
 
 				SetWindowLongPtr(hwnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(ptrWindow));
 				SetWindowLongPtr(hwnd, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(HandleMsgRedirect));

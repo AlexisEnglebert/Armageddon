@@ -32,25 +32,41 @@ public:
 
 
 
-            // FACE FACE
-            Vertex(-0.1f,  -0.1f, -0.1f,  0.0f, 1.0f,0,0,-1.0), /// botom Left Point  - [0] // bas gauche
-            Vertex(-0.1f,   0.1f, -0.1f,  0.0f, 0.0f,0,0,-1.0), //top Left Point     - [1] // haut gauche
-            Vertex{0.1f,   0.1f, -0.1f,  1.0f, 0.0f,0,0,-1.0},     //               -[2]   // haut droit
-            Vertex(0.1,     -0.1f,-0.1f,  1.0f, 1.0f,0,0,-1.0), //Right Point      - [3]    // bas droit
+            // Front Face
+             Vertex(-1.0f, -1.0f, -1.0f, 0.0f, 1.0f,-1.0f, -1.0f, -1.0f),
+             Vertex(-1.0f,  1.0f, -1.0f, 0.0f, 0.0f,-1.0f,  1.0f, -1.0f),
+             Vertex(1.0f,  1.0f, -1.0f, 1.0f, 0.0f, 1.0f,  1.0f, -1.0f),
+             Vertex(1.0f, -1.0f, -1.0f, 1.0f, 1.0f, 1.0f, -1.0f, -1.0f),
 
+     // Back Face
+             Vertex(-1.0f, -1.0f, 1.0f, 1.0f, 1.0f,-1.0f, -1.0f, 1.0f),
+             Vertex(1.0f, -1.0f, 1.0f, 0.0f, 1.0f, 1.0f, -1.0f, 1.0f),
+             Vertex(1.0f,  1.0f, 1.0f, 0.0f, 0.0f, 1.0f,  1.0f, 1.0f),
+             Vertex(-1.0f,  1.0f, 1.0f, 1.0f, 0.0f,-1.0f,  1.0f, 1.0f),
 
+     // Top Face
+             Vertex(-1.0f, 1.0f, -1.0f, 0.0f, 1.0f,-1.0f, 1.0f, -1.0f),
+             Vertex(-1.0f, 1.0f,  1.0f, 0.0f, 0.0f,-1.0f, 1.0f,  1.0f),
+             Vertex(1.0f, 1.0f,  1.0f, 1.0f, 0.0f, 1.0f, 1.0f,  1.0f),
+            Vertex(1.0f, 1.0f, -1.0f, 1.0f, 1.0f, 1.0f, 1.0f, -1.0f),
 
-            Vertex(0.1f,  -0.1f,  0.1f,  0.0f, 1.0f,0,0,-1.0), /// botom Left Point  - [4] // bas gauche
-            Vertex(0.1f,   0.1f, 0.1f,  0.0f, 0.0f,0,0,-1.0), //top Left Point     - [5] // haut gauche
-            Vertex{-0.1f,   0.1f, 0.1f,  1.0f, 0.0f,0,0,-1.0},     //               -[6]   // haut droit
-            Vertex(-0.1,     -0.1f, 0.1f,  1.0f, 1.0f,0,0,-1.0), //Right Point      - [7]    // bas droit
+     // Bottom Face
+            Vertex(-1.0f, -1.0f, -1.0f, 1.0f, 1.0f,-1.0f, -1.0f, -1.0f),
+             Vertex(1.0f, -1.0f, -1.0f, 0.0f, 1.0f, 1.0f, -1.0f, -1.0f),
+             Vertex(1.0f, -1.0f,  1.0f, 0.0f, 0.0f, 1.0f, -1.0f,  1.0f),
+             Vertex(-1.0f, -1.0f,  1.0f, 1.0f, 0.0f,-1.0f, -1.0f,  1.0f),
 
+     // Left Face
+             Vertex(-1.0f, -1.0f,  1.0f, 0.0f, 1.0f,-1.0f, -1.0f,  1.0f),
+             Vertex(-1.0f,  1.0f,  1.0f, 0.0f, 0.0f,-1.0f,  1.0f,  1.0f),
+             Vertex(-1.0f,  1.0f, -1.0f, 1.0f, 0.0f,-1.0f,  1.0f, -1.0f),
+            Vertex(-1.0f, -1.0f, -1.0f, 1.0f, 1.0f,-1.0f, -1.0f, -1.0f),
 
-
-            Vertex(0.2f,  0.2f, -0.1f,  0.0f, 1.0f,0,0,-1.0), /// botom Left Point  - [0] // bas gauche
-            Vertex(0.2f,   0.4f, -0.1f,  0.0f, 0.0f,0,0,-1.0), //top Left Point     - [1] // haut gauche
-            Vertex{0.4f,   0.4f, -0.1f,  1.0f, 0.0f,0,0,-1.0},     //               -[2]   // haut droit
-            Vertex(0.4,    0.2f,-0.1f,  1.0f, 1.0f,0,0,-1.0), //Right Point      - [3]    // bas droit
+     // Right Face
+            Vertex(1.0f, -1.0f, -1.0f, 0.0f, 1.0f, 1.0f, -1.0f, -1.0f),
+            Vertex(1.0f,  1.0f, -1.0f, 0.0f, 0.0f, 1.0f,  1.0f, -1.0f),
+            Vertex(1.0f,  1.0f,  1.0f, 1.0f, 0.0f, 1.0f,  1.0f,  1.0f),
+            Vertex(1.0f, -1.0f,  1.0f, 1.0f, 1.0f, 1.0f, -1.0f,  1.0f),
 
 
         };
@@ -60,54 +76,55 @@ public:
 
          DWORD indices[] =
          {
-             // avant -- face
-             0,1,2,
-             2,3,0,
-             // arrière -- face
+             // Front Face
+         0,  1,  2,
+         0,  2,  3,
 
-             4,5,6,
-             6,7,4,
+         // Back Face
+         4,  5,  6,
+         4,  6,  7,
 
-             //haut -- face
-           1,6,5,
-           5,2,1,
+         // Top Face
+         8,  9, 10,
+         8, 10, 11,
 
+         // Bottom Face
+         12, 13, 14,
+         12, 14, 15,
 
+         // Left Face
+         16, 17, 18,
+         16, 18, 19,
 
-           //bas -- face
-           7,0,3,
-           3,4,7,
-
-           // droit  -- face
-           3,2,5,
-           5,4,3,
-           //gauche -- face
-           7,6,1,
-           1,0,7,
-
-           8,9,10,
-           10,11,8
-
-
+         // Right Face
+         20, 21, 22,
+         20, 22, 23
 
          };
 		 InitIndexBuffer(device.Get(), device_context.Get(),indices, ARRAYSIZE(indices));
          D3D11_INPUT_ELEMENT_DESC layout[] =
          {
-             {"POSITION",0,DXGI_FORMAT::DXGI_FORMAT_R32G32B32_FLOAT,0,0,D3D11_INPUT_PER_VERTEX_DATA,0},
+            {"POSITION",0,DXGI_FORMAT::DXGI_FORMAT_R32G32B32_FLOAT,0,0,D3D11_INPUT_PER_VERTEX_DATA,0},
             {"TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0},
             {"NORMAL",0, DXGI_FORMAT_R32G32B32_FLOAT,0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0},
+            {"COLOR",0, DXGI_FORMAT_R32G32B32_FLOAT,0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0},
+            { "TANGENT", 0, DXGI_FORMAT_R32G32B32_FLOAT,    0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0},
+            {"BINORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT,    0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0},
+
 
          };
 		 InitShaders(device,L"..\\bin\\Debug-x64\\Armageddon\\", L"VertexShader.cso", L"PixelShader.cso", layout, ARRAYSIZE(layout));
 
 		 InitConstantBuffer(device.Get(), device_context.Get());
          //graphics.GetVectorObjects().push_back(&o);
+        auto mat = Material(device, device_context);
+        mat.setMaterialName("DEFAULT MATERIAL");
+        ObjectMaterials.push_back(mat);
          Armageddon::Log::GetLogger()->trace("CREATED MODEL");
 	};
     virtual void Draw(ID3D11DeviceContext* device_contex) override
     {
-
+        ObjectMaterials[0].BindRessources();
         BindShader(device_contex);
         BindConstantBuffer(device_contex);
         BindInputLayout(device_contex);
