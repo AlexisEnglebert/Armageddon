@@ -22,3 +22,12 @@
 [submodule "Armageddon/includes/entt"]
 	path = Armageddon/includes/entt
 	url = https://github.com/skypjack/entt
+[submodule "TestApplication/Includes/ImGui-Addons"]
+	path = TestApplication/Includes/ImGui-Addons
+	url = https://github.com/gallickgunner/ImGui-Addons
+[submodule "Armageddon/includes/ImGuizmo"]
+	path = Armageddon/includes/ImGuizmo
+	url = https://github.com/CedricGuillemet/ImGuizmo
+[submodule "Armageddon/includes/stb"]
+	path = Armageddon/includes/stb
+	url = https://github.com/nothings/stb
